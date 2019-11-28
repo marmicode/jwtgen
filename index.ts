@@ -4,11 +4,21 @@ const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 
 const main = async () => {
-  const { passphrase } = await inquirer.prompt([
+  const { expiresIn, passphrase } = await inquirer.prompt([
     {
       name: 'passphrase',
       message: 'Passphrase',
       type: 'password'
+    },
+    {
+      name: 'audience',
+      message: 'Audience',
+      type: 'string'
+    },
+    {
+      name: 'expiresIn',
+      message: 'Token lifetime (e.g.: "1h", "7d")',
+      type: 'string'
     }
   ]);
 
@@ -17,10 +27,12 @@ const main = async () => {
     'utf-8'
   );
 
+  const user = process.env.USER;
+
   const token = jwt.sign(
-    { sub: process.env.USER },
+    { sub: user },
     { key: privateKey, passphrase },
-    { algorithm: 'RS256' }
+    { algorithm: 'RS256', expiresIn, issuer: user }
   );
 
   console.log(token);
