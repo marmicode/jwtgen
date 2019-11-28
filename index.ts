@@ -1,6 +1,7 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
 const shortid = require('shortid');
+const shorthash = require('shorthash');
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 
@@ -33,7 +34,13 @@ const main = async () => {
   const token = jwt.sign(
     { sub: user },
     { key: privateKey, passphrase },
-    { algorithm: 'RS256', expiresIn, jwtid: shortid.generate(), issuer: user }
+    {
+      algorithm: 'RS256',
+      expiresIn,
+      jwtid: shortid.generate(),
+      issuer: user,
+      keyid: shorthash.unique(privateKey.trim())
+    }
   );
 
   console.log(token);
