@@ -6,11 +6,18 @@ const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 
 const main = async () => {
-  const { expiresIn, passphrase } = await inquirer.prompt([
+  const { audience, expiresIn, passphrase, username } = await inquirer.prompt([
+    {
+      name: 'username',
+      message: 'User name',
+      type: 'string',
+      default: process.env.USER
+    },
     {
       name: 'passphrase',
       message: 'Passphrase',
-      type: 'password'
+      type: 'password',
+      default: null
     },
     {
       name: 'audience',
@@ -29,16 +36,15 @@ const main = async () => {
     'utf-8'
   );
 
-  const user = process.env.USER;
-
   const token = jwt.sign(
-    { sub: user },
+    { sub: username },
     { key: privateKey, passphrase },
     {
       algorithm: 'RS256',
+      audience,
       expiresIn,
       jwtid: shortid.generate(),
-      issuer: user,
+      issuer: username,
       keyid: shorthash.unique(privateKey.trim())
     }
   );
