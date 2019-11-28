@@ -1,5 +1,6 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
+const shortid = require('shortid');
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 
@@ -32,7 +33,7 @@ const main = async () => {
   const token = jwt.sign(
     { sub: user },
     { key: privateKey, passphrase },
-    { algorithm: 'RS256', expiresIn, issuer: user }
+    { algorithm: 'RS256', expiresIn, jwtid: shortid.generate(), issuer: user }
   );
 
   console.log(token);
