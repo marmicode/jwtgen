@@ -18,7 +18,9 @@
   "dependencies": {
     "inquirer": "^7.0.0",
     "jsonwebtoken": "^8.5.1",
+    "pem-jwk": "^2.0.0",
     "shorthash": "^0.0.2",
-    "shortid": "^2.2.15"
+    "shortid": "^2.2.15",
+    "sshpk": "^1.16.1"
   }
 }
